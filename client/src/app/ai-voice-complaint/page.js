@@ -122,7 +122,7 @@ export default function AIVoiceComplaint() {
     // Initialize Gemini AI
     useEffect(() => {
         // Initialize Gemini - In production, use environment variables
-        const API_KEY = "AIzaSyDrqsFxk2IvCaJqZww3tQULa3do_8RGCso"; // Replace with your API key
+        const API_KEY = "your api here"; // Replace with your API key
         genAI.current = new GoogleGenerativeAI(API_KEY);
     }, []);
 
