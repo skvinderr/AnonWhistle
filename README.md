@@ -9,10 +9,6 @@
 
 **AnonWhistle** is a revolutionary blockchain-powered platform that enables anonymous reporting of corruption and misconduct. Built with cutting-edge AI technology, it provides a secure, transparent, and efficient system for citizens to report issues while protecting their identity and ensuring accountability.
 
-### 🎯 Mission Statement
-
-Empowering citizens to fight corruption through anonymous reporting while providing officials with advanced AI tools to verify evidence authenticity and manage complaints effectively.
-
 ## ✨ Key Features
 
 ### 🔒 **Anonymous Reporting System**
