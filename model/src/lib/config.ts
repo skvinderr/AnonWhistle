@@ -4,7 +4,7 @@ export const config = {
     model: 'text-embedding-3-large',
   },
   gemini: {
-    apiKey: process.env.GOOGLE_API_KEY || 'AIzaSyC5XlpDGwiPOc-cHX1jKtFsMSVYd3xPGGM',
+    apiKey: process.env.GOOGLE_API_KEY || 'your gemini api here',
     model: process.env.GEMINI_MODEL_NAME || 'gemini-2.5-pro',
   },
   pinecone: {
