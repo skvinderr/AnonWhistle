@@ -277,12 +277,6 @@ npm run deploy       # Deploy to production
 npm run analyze      # Bundle analysis
 ```
 
-### **Code Quality**
-- **ESLint**: Code style enforcement
-- **Prettier**: Automatic code formatting
-- **TypeScript**: Static type checking
-- **Husky**: Git hooks for quality gates
-
 ## 🌍 Deployment
 
 ### **Production Deployment**
