@@ -7,7 +7,8 @@ import {
     FaFilter, FaEye, FaCheckCircle, FaTimes, FaClock, FaExclamationTriangle,
     FaFileAlt, FaBell, FaPlus, FaHome, FaUserTie, FaBuilding, FaCog,
     FaSignOutAlt, FaChartBar, FaUserShield, FaCalendarAlt, FaDownload,
-    FaArrowUp, FaArrowDown
+    FaArrowUp, FaArrowDown, FaRobot, FaVideo, FaImage, FaFileImage,
+    FaMicroscope, FaBrain, FaPlay, FaPause, FaSpinner
 } from 'react-icons/fa';
 import { ChartCard, LineChart, MetricCard } from '../../components/Charts';
 import { MdAdminPanelSettings, MdGavel, MdVerifiedUser, MdDashboard, MdAssignment } from 'react-icons/md';
@@ -19,6 +20,12 @@ export default function OfficialDashboard() {
     const [userRole, setUserRole] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [sidebarOpen, setSidebarOpen] = useState(true);
+
+    // Deepfake Detection States
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [analysisResults, setAnalysisResults] = useState(null);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [analysisHistory, setAnalysisHistory] = useState([]);
 
     const [filterDepartment, setFilterDepartment] = useState('all');
     const [filterPriority, setFilterPriority] = useState('all');
@@ -173,6 +180,7 @@ export default function OfficialDashboard() {
         const descriptions = {
             dashboard: 'Monitor key metrics and recent activities',
             complaints: 'Manage and track all complaint cases',
+            'deepfake-detection': 'AI-powered evidence verification and authenticity analysis',
             analytics: 'View detailed performance analytics',
             departments: 'Manage department information',
             users: 'User management and permissions',
@@ -218,6 +226,74 @@ export default function OfficialDashboard() {
         }
     };
 
+    // Deepfake Detection Functions
+    const handleFileUpload = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            setAnalysisResults(null);
+        }
+    };
+
+    const analyzeWithDeepfakeDetection = async () => {
+        if (!selectedFile) return;
+
+        setIsAnalyzing(true);
+        
+        // Simulate AI analysis with realistic delay
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        // Mock analysis results
+        const analysisResult = {
+            id: `ANALYSIS-${Date.now()}`,
+            fileName: selectedFile.name,
+            fileType: selectedFile.type,
+            fileSize: `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`,
+            timestamp: new Date().toISOString(),
+            overall_authenticity: Math.random() > 0.3 ? 'AUTHENTIC' : 'SUSPICIOUS',
+            confidence_score: (85 + Math.random() * 15).toFixed(1),
+            analysis_details: {
+                deepfake_probability: (Math.random() * 30).toFixed(1),
+                manipulation_detected: Math.random() > 0.7,
+                metadata_analysis: {
+                    creation_date: new Date().toISOString().split('T')[0],
+                    device_info: 'Camera: Canon EOS R5',
+                    gps_location: '19.0760° N, 72.8777° E',
+                    software_used: 'Adobe Lightroom CC'
+                },
+                technical_analysis: {
+                    compression_artifacts: Math.random() > 0.5 ? 'Normal' : 'Suspicious',
+                    pixel_consistency: Math.random() > 0.3 ? 'Consistent' : 'Inconsistent',
+                    noise_pattern: Math.random() > 0.4 ? 'Natural' : 'Artificial'
+                }
+            },
+            ai_engines_used: [
+                { name: 'Microsoft Video Authenticator', confidence: (88 + Math.random() * 10).toFixed(1) },
+                { name: 'Deepware Scanner', confidence: (85 + Math.random() * 12).toFixed(1) },
+                { name: 'FaceForensics++', confidence: (90 + Math.random() * 8).toFixed(1) }
+            ],
+            recommendations: selectedFile && selectedFile.type.includes('video') ? [
+                'Cross-reference with original source if available',
+                'Verify timestamp against incident report',
+                'Check for additional corroborating evidence'
+            ] : [
+                'Examine EXIF data for tampering signs',
+                'Compare with known authentic samples',
+                'Verify metadata consistency'
+            ]
+        };
+
+        setAnalysisResults(analysisResult);
+        setAnalysisHistory(prev => [analysisResult, ...prev]);
+        setIsAnalyzing(false);
+    };
+
+    const getFileTypeIcon = (fileType) => {
+        if (fileType.includes('video')) return <FaVideo className="text-blue-400" />;
+        if (fileType.includes('image')) return <FaImage className="text-green-400" />;
+        return <FaFileImage className="text-purple-400" />;
+    };
+
     const filteredComplaints = complaints.filter(complaint => {
         const matchesSearch = complaint.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             complaint.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -259,6 +335,7 @@ export default function OfficialDashboard() {
     const menuItems = [
         { id: 'dashboard', label: 'Dashboard', icon: MdDashboard },
         { id: 'complaints', label: 'Complaints', icon: FaClipboardList, badge: complaints.length },
+        { id: 'deepfake-detection', label: 'AI Evidence Verification', icon: FaRobot },
         { id: 'analytics', label: 'Analytics', icon: FaChartBar },
         { id: 'departments', label: 'Departments', icon: FaBuilding },
         { id: 'users', label: 'Users', icon: FaUsers },
@@ -592,7 +669,180 @@ export default function OfficialDashboard() {
         </div>
     );
 
+    const renderDeepfakeDetection = () => (
+        <div className="space-y-6">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-6 text-white">
+                <div className="flex items-center gap-3 mb-2">
+                    <FaRobot className="text-2xl" />
+                    <h2 className="text-2xl font-bold">AI Evidence Verification</h2>
+                </div>
+                <p className="opacity-90">Advanced deepfake and forgery detection for uploaded evidence files</p>
+            </div>
 
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Upload Section */}
+                <div className="bg-[#383F51] rounded-xl p-6 shadow-sm border border-[#AB9F9D]/30">
+                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                        <FaMicroscope className="text-blue-400" />
+                        Evidence Analysis
+                    </h3>
+                    
+                    <div className="border-2 border-dashed border-[#AB9F9D]/30 rounded-lg p-8 text-center">
+                        <input
+                            type="file"
+                            accept="image/*,video/*"
+                            onChange={handleFileUpload}
+                            className="hidden"
+                            id="evidence-upload"
+                        />
+                        <label htmlFor="evidence-upload" className="cursor-pointer">
+                            <FaFileImage className="text-4xl text-[#DDDBF1] mx-auto mb-4" />
+                            <p className="text-white mb-2">Upload Evidence File</p>
+                            <p className="text-white/60 text-sm">Support for images and videos (max 50MB)</p>
+                        </label>
+                    </div>
+
+                    {selectedFile && (
+                        <div className="mt-4 p-4 bg-[#2d3142] rounded-lg border border-[#AB9F9D]/20">
+                            <div className="flex items-center gap-3 mb-3">
+                                {getFileTypeIcon(selectedFile.type)}
+                                <div>
+                                    <p className="text-white font-medium">{selectedFile.name}</p>
+                                    <p className="text-white/60 text-sm">
+                                        {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={analyzeWithDeepfakeDetection}
+                                disabled={isAnalyzing}
+                                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                            >
+                                {isAnalyzing ? (
+                                    <>
+                                        <FaSpinner className="animate-spin" />
+                                        Analyzing...
+                                    </>
+                                ) : (
+                                    <>
+                                        <FaBrain />
+                                        Analyze with AI
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                {/* Results Section */}
+                <div className="bg-[#383F51] rounded-xl p-6 shadow-sm border border-[#AB9F9D]/30">
+                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                        <FaShieldAlt className="text-green-400" />
+                        Analysis Results
+                    </h3>
+                    
+                    {analysisResults ? (
+                        <div className="space-y-4">
+                            <div className={`p-4 rounded-lg border-2 ${
+                                analysisResults.overall_authenticity === 'AUTHENTIC'
+                                    ? 'bg-green-500/20 border-green-500/30'
+                                    : 'bg-red-500/20 border-red-500/30'
+                            }`}>
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="font-medium text-white">Overall Assessment</span>
+                                    <span className={`font-bold ${
+                                        analysisResults.overall_authenticity === 'AUTHENTIC'
+                                            ? 'text-green-400'
+                                            : 'text-red-400'
+                                    }`}>
+                                        {analysisResults.overall_authenticity}
+                                    </span>
+                                </div>
+                                <div className="text-white/80 text-sm">
+                                    Confidence: {analysisResults.confidence_score}%
+                                </div>
+                            </div>
+
+                            <div className="space-y-3">
+                                <h4 className="font-medium text-white">AI Engine Results</h4>
+                                {analysisResults.ai_engines_used.map((engine, index) => (
+                                    <div key={index} className="flex justify-between items-center py-2 px-3 bg-[#2d3142] rounded">
+                                        <span className="text-white/80 text-sm">{engine.name}</span>
+                                        <span className="text-blue-400 font-medium">{engine.confidence}%</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="space-y-3">
+                                <h4 className="font-medium text-white">Technical Analysis</h4>
+                                <div className="text-sm space-y-2 text-white/80">
+                                    <div>Deepfake Probability: {analysisResults.analysis_details.deepfake_probability}%</div>
+                                    <div>Manipulation Detected: {analysisResults.analysis_details.manipulation_detected ? 'Yes' : 'No'}</div>
+                                    <div>Compression: {analysisResults.analysis_details.technical_analysis.compression_artifacts}</div>
+                                    <div>Pixel Consistency: {analysisResults.analysis_details.technical_analysis.pixel_consistency}</div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3">
+                                <h4 className="font-medium text-white">Recommendations</h4>
+                                <ul className="space-y-1 text-sm text-white/80">
+                                    {analysisResults.recommendations.map((rec, index) => (
+                                        <li key={index} className="flex items-start gap-2">
+                                            <span className="text-blue-400 mt-1">•</span>
+                                            {rec}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="text-center py-8">
+                            <FaSearch className="text-4xl text-[#AB9F9D] mx-auto mb-4" />
+                            <p className="text-white/60">Upload a file to start analysis</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Analysis History */}
+            {analysisHistory.length > 0 && (
+                <div className="bg-[#383F51] rounded-xl p-6 shadow-sm border border-[#AB9F9D]/30">
+                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                        <FaClock className="text-orange-400" />
+                        Analysis History
+                    </h3>
+                    <div className="space-y-3">
+                        {analysisHistory.slice(0, 5).map((analysis) => (
+                            <div key={analysis.id} className="flex items-center justify-between p-3 bg-[#2d3142] rounded-lg">
+                                <div className="flex items-center gap-3">
+                                    {getFileTypeIcon(analysis.fileType)}
+                                    <div>
+                                        <p className="text-white font-medium">{analysis.fileName}</p>
+                                        <p className="text-white/60 text-sm">
+                                            {new Date(analysis.timestamp).toLocaleString()}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <div className={`font-medium ${
+                                        analysis.overall_authenticity === 'AUTHENTIC'
+                                            ? 'text-green-400'
+                                            : 'text-red-400'
+                                    }`}>
+                                        {analysis.overall_authenticity}
+                                    </div>
+                                    <div className="text-white/60 text-sm">
+                                        {analysis.confidence_score}% confidence
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 
     const renderAnalytics = () => (
         <div className="space-y-6">
@@ -758,6 +1008,8 @@ export default function OfficialDashboard() {
                 return renderDashboard();
             case 'complaints':
                 return renderComplaints();
+            case 'deepfake-detection':
+                return renderDeepfakeDetection();
             case 'analytics':
                 return renderAnalytics();
             case 'departments':
